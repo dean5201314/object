@@ -40,9 +40,10 @@ class DB{
         }
     }
     
-    function total($id)
-    {      
-        $sql = "select count(`id`) from `$this->table` ";
+    function total($table, $id)
+    {
+        global $pdo;
+        $sql = "select count(`id`) from `$table` ";
     
         if (is_array($id)) {
             foreach ($id as $col => $value) {
@@ -55,13 +56,14 @@ class DB{
             echo "錯誤:參數的資料型態比須是數字或陣列";
         }
         //echo 'find=>'.$sql;
-        $row = $this->pdo->query($sql)->fetchColumn();
+        $row = $pdo->query($sql)->fetchColumn();
         return $row;
     }
     
-    function find($id)
+    function find($table, $id)
     {
-        $sql = "select * from `$this->table` ";
+        global $pdo;
+        $sql = "select * from `$table` ";
     
         if (is_array($id)) {
             foreach ($id as $col => $value) {
@@ -78,9 +80,11 @@ class DB{
         return $row;
     }
     
-    function update($id, $cols)
+    function update($table, $id, $cols)
     {
-        $sql = "update `$this->table` set ";
+        global $pdo;
+    
+        $sql = "update `$table` set ";
     
         if (!empty($cols)) {
             foreach ($cols as $col => $value) {
@@ -103,12 +107,14 @@ class DB{
             echo "錯誤:參數的資料型態比須是數字或陣列";
         }
         // echo $sql;
-        return $this->pdo->exec($sql);
+        return $pdo->exec($sql);
     }
     
-    function insert($values)
+    function insert($table, $values)
     {
-        $sql = "insert into `$this->table` ";
+        global $pdo;
+    
+        $sql = "insert into `$table` ";
         $cols = "(`" . join("`,`", array_keys($values)) . "`)";
         $vals = "('" . join("','", $values) . "')";
     
@@ -119,9 +125,10 @@ class DB{
         return $pdo->exec($sql);
     }
     
-    function del($id)
+    function del($table, $id)
     {
-        $sql = "delete from `$this->table` where ";
+        global $pdo;
+        $sql = "delete from `$table` where ";
     
         if (is_array($id)) {
             foreach ($id as $col => $value) {
@@ -135,7 +142,7 @@ class DB{
         }
         //echo $sql;
     
-        return $this->pdo->exec($sql);
+        return $pdo->exec($sql);
     }
 
 }
